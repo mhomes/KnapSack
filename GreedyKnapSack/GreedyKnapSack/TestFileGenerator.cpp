@@ -4,6 +4,7 @@
 // Greedy KnapSack - Test File Creator
 //
 
+#include "pch.h"
 #include <iostream>
 #include <fstream>
 using namespace std;
