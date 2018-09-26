@@ -12,6 +12,7 @@
 using namespace std;
 
 double findRatio(int w, int v);
+int Dequeue(Node node, Node parent);
 
 struct Loot {
 
@@ -22,7 +23,7 @@ struct Loot {
 
 };
 
-/*
+
 struct Node {
 
 	Loot* heldItem;
@@ -30,9 +31,11 @@ struct Node {
 	Node* RHNode;
 	Node* parent;
 
-}; */
+};
 
+struct PQ {
 
+};
 
 int main() {
 
@@ -44,17 +47,19 @@ int main() {
 	fileIn >> numGems >> bagSize;
 
 	// create Loot objects for each item
-	Loot * test = new Loot[30];
+	Loot * insert = new Loot[numGems];
 	//std::vector<Loot> testArray;
 	for (int i = 0; i < numGems; i++) {
 		string n;
 		int w, v;
 		fileIn >> n;
 		fileIn >> w >> v;
-		test[i].name = n;
-		test[i].weight = w;
-		test[i].value = v;
-		test[i].ratio = findRatio(w, v);
+		insert[i].name = n;
+		insert[i].weight = w;
+		insert[i].value = v;
+		insert[i].ratio = findRatio(w, v);
+
+
 		//cout << test[i].name << endl;
 	}
 
@@ -74,6 +79,16 @@ int main() {
 
 double findRatio(int w, int v) {
 	return (w / v);
+}
+
+int PQ::Dequeue(Node* node, Node* parent)
+{
+	Node derpNode = node;
+	while (node->RHNode) {
+		parent = node;
+		node = node.RHNode;
+	}
+	delete derpNode;
 }
 
 
