@@ -4,27 +4,37 @@
 // Greedy KnapSack - Loot Item Class
 //
 
-#include "pch.h"
 #include <iostream>
 #include <cstring>
 using namespace std;
 
-struct Loot {
+class Loot {
 
-	String name;
+public:
+
+	string name = "GOD DAMN";
 	int weight;
 	int value;
 	double ratio;
 
-
-	Loot(String n, int w, int v) {
-		name = n;
-		weight = w;
-		value = n;
-		ratio = computeRatio(w, v);
+	void printName() {
+		cout << name << endl;
 	}
 
-	private double computeRatio(int w, int v) {
-		return (w / v);
-	}
 };
+
+int main() {
+
+	Loot test;
+	test.value = 10l;
+	test.printName();
+	return 0;
+}
+
+/*	struct Loot {
+
+		String name;
+		int weight;
+		int value;
+		double ratio;
+	}*/
