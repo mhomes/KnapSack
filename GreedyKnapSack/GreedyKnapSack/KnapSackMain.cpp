@@ -8,8 +8,32 @@
 #include <fstream>
 #include <cstring>
 
-#include "Loot"
+//#include "Loot.cpp"
 using namespace std;
+
+class Loot {
+
+public:
+
+	static string name;
+	static int weight;
+	static int value;
+	static double ratio;
+
+};
+
+class Node {
+
+public:
+	Loot* heldItem;
+	Node* LHNode;
+	Node* RHNode;
+	Node* parent;
+
+	//	Node(Loot item, Node left, Node right, Node mom) {
+
+		//}
+};
 
 int main() {
 
@@ -21,15 +45,38 @@ int main() {
 	fileIn >> numGems >> bagSize;
 
 	// create Loot objects for each item
+	Loot test[] = new Loot[30];
+	//std::vector<Loot> testArray;
 	for (int i = 0; i < numGems; i++) {
-		int n, w, v;
-		fileIn >> n >> w >> v;
-		Loot* i = new Loot(n, w, v);
-		cout << n << endl;
-		delete i;
+		string n;
+		int w, v;
+		fileIn.get(n);
+		fileIn >> w >> v;
+		test[i].name = n;
+		test[i].weight = w;
+		test[i].value = v;
+		test[i].ratio = findRatio(w, v);
+		cout << testArray[i].name << endl;
 	}
+
+	for (int i = 0; i < numGems; i++)
+		//delete testArray[i];
+
+	// done - read file in
+	//create object for it
+	//put it in the queue based on ratio
+	//pull items off the queue untill bag is full
+	//print out items in bag
+
+
 	return 0;
 }
+
+double findRatio(int w, int v) {
+	return (w / v);
+}
+
+
 
 
 
