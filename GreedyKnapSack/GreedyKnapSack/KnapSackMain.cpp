@@ -29,15 +29,18 @@ struct Node {
 
 };
 
+//where do we create a node?
+
 double findRatio(int w, int v);
 //int Dequeue(Node node, Node parent);
 
 class PQ {
 
 public:
-	void enqueue(Node node, Node parent){
-		while (Node node > 0) {
-			if (ratio < node->heldItem) {
+	void enqueue(Node node, Node parent, Loot loot){
+		while (Loot heldItem >= 0) {
+			//we need a root, to then put nodes on the left
+			if (loot.ratio < node->heldItem) {
 				if (node->LHNode) {
 					node = node->LHNode;
 				}
@@ -55,7 +58,7 @@ public:
 						node = node->RHNode;
 				}
 					else{
-						node->RHNode = new node(value);
+						Node.RHNode = new node(value);
 							return();
 				}
 			}
@@ -64,9 +67,9 @@ public:
 
 	void dequeue(Node node, Node parent){
 		Node CurrentNode = node;
-		while (node->RHNode) {
+		while (Node.RHNode !=0) {
 			parent = node;
-			node = node.RHNode;
+			node = Node.RHNode;
 		}
 		delete CurrentNode;
 	}
@@ -78,7 +81,7 @@ public:
 			print(root->LHNode);
 		}
 		if (root->RHNode != NULL) {
-			cout << root->.RHNode->heldItem->name << endl;
+			cout << root->RHNode->heldItem->name << endl;
 			print(root->RHNode);
 		}
 		else
