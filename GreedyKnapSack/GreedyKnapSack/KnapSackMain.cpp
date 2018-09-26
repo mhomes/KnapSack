@@ -8,7 +8,7 @@
 #include <fstream>
 #include <cstring>
 
-//#include "Loot"
+#include "Loot"
 using namespace std;
 
 int main() {
@@ -24,7 +24,9 @@ int main() {
 	for (int i = 0; i < numGems; i++) {
 		int n, w, v;
 		fileIn >> n >> w >> v;
-		//Loot* i = new Loot(n, w, v);
+		Loot* i = new Loot(n, w, v);
+		cout << n << endl;
+		delete i;
 	}
 	return 0;
 }

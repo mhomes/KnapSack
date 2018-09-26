@@ -17,6 +17,13 @@ public:
 	int value;
 	double ratio;
 
+	Loot(string n, int w, int v) {
+		name = n;
+		weight = w;
+		value = v;
+		ratio = findRatio(w, v);
+	}
+
 	void printName() {
 		cout << name << endl;
 	}
