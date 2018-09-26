@@ -36,22 +36,50 @@ class PQ {
 
 public:
 	void enqueue(Node node, Node parent){
-
+		while (Node node > 0) {
+			if (ratio < node->heldItem) {
+				if (node->LHNode) {
+					node = node->LHNode;
+				}
+				else {
+					node->LHNode = new node((heldItem.ratio = ratio));
+						return();
+				}
+			else
+				if (node->RHNode){
+					node = node->RHNode;
+				}
+			}
+				else{
+					if (node->RHNode){
+						node = node->RHNode;
+				}
+					else{
+						node->RHNode = new node(value);
+							return();
+				}
+			}
+		}
 	}
 
 	void dequeue(Node node, Node parent){
-
+		Node CurrentNode = node;
+		while (node->RHNode) {
+			parent = node;
+			node = node.RHNode;
+		}
+		delete CurrentNode;
 	}
 
 	void print(Node* root) {
 		cout<<root->heldItem->name << endl;
 		if (root->LHNode != NULL) {
-			cout << root->.LHNode->heldItem->name << endl;
-			print(root->LHNode)
+			cout << root->LHNode->heldItem->name << endl;
+			print(root->LHNode);
 		}
 		if (root->RHNode != NULL) {
 			cout << root->.RHNode->heldItem->name << endl;
-			print(root->RHNode)
+			print(root->RHNode);
 		}
 		else
 			return();
