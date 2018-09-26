@@ -4,9 +4,9 @@
 // Greedy KnapSack - Test File Creator
 //
 
-#include "pch.h"
 #include <iostream>
 #include <fstream>
+#include <stdlib.h>
 using namespace std;
 
 int random(int max);
@@ -16,14 +16,14 @@ int main() {
 	int NumGems, BagSize = 0;
 
 	cout << "Enter the number of items in the list followed by the" <<
-		"\nsize of the bag."
-		cin >> NumbGems >> BagSize;
+		"\nsize of the bag." << endl;
+		cin >> NumGems >> BagSize;
 
 	ofstream outputFile;
 	outputFile.open("TestFile.txt");
 	
 	outputFile << NumGems << " " << BagSize << endl;
-	for (int i = o; i < NumGems; i++) {
+	for (int i = 0; i < NumGems; i++) {
 		int value = random(NumGems);
 		int weight = random(NumGems);
 
