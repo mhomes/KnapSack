@@ -44,12 +44,13 @@ public:
 	}
 
 	void print(Node* root) {
+		cout<<root->heldItem->name << endl;
 		if (root->LHNode != NULL) {
 			cout << root->.LHNode->heldItem->name << endl;
 			print(root->LHNode)
 		}
 		if (root->RHNode != NULL) {
-			cout << root->.RHNode->heldItem->ratio << endl;
+			cout << root->.RHNode->heldItem->name << endl;
 			print(root->RHNode)
 		}
 		else
