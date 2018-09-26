@@ -11,9 +11,6 @@
 //#include "Loot.cpp"
 using namespace std;
 
-double findRatio(int w, int v);
-int Dequeue(Node node, Node parent);
-
 struct Loot {
 
 	string name;
@@ -22,7 +19,6 @@ struct Loot {
 	double ratio;
 
 };
-
 
 struct Node {
 
@@ -33,7 +29,35 @@ struct Node {
 
 };
 
-struct PQ {
+double findRatio(int w, int v);
+//int Dequeue(Node node, Node parent);
+
+class PQ {
+
+public:
+	void enqueue(Node node, Node parent){
+
+	}
+
+	void dequeue(Node node, Node parent){
+
+	}
+
+	void print(Node* root) {
+		if (root->LHNode != NULL) {
+			cout << root->.LHNode->heldItem->name << endl;
+			print(root->LHNode)
+		}
+		if (root->RHNode != NULL) {
+			cout << root->.RHNode->heldItem->ratio << endl;
+			print(root->RHNode)
+		}
+		else
+			return();
+	}
+
+private:
+	Node root;
 
 };
 
@@ -48,7 +72,12 @@ int main() {
 
 	// create Loot objects for each item
 	Loot * insert = new Loot[numGems];
-	//std::vector<Loot> testArray;
+	Node * node;
+	PQ Q;
+
+	Node rootNode.parent = NULL;
+	Q.root = rootNode;
+
 	for (int i = 0; i < numGems; i++) {
 		string n;
 		int w, v;
@@ -59,6 +88,8 @@ int main() {
 		insert[i].value = v;
 		insert[i].ratio = findRatio(w, v);
 
+		node->heldItem = insert;
+		Q.enqueue(node);
 
 		//cout << test[i].name << endl;
 	}
@@ -81,15 +112,6 @@ double findRatio(int w, int v) {
 	return (w / v);
 }
 
-int PQ::Dequeue(Node* node, Node* parent)
-{
-	Node derpNode = node;
-	while (node->RHNode) {
-		parent = node;
-		node = node.RHNode;
-	}
-	delete derpNode;
-}
 
 
 
