@@ -6,16 +6,17 @@
 
 #include <iostream>
 #include <cstring>
+
 using namespace std;
 
 class Loot {
 
 public:
 
-	string name = "GOD DAMN";
-	int weight;
-	int value;
-	double ratio;
+	static string name;
+	static int weight;
+	static int value;
+	static double ratio;
 
 	Loot(string n, int w, int v) {
 		name = n;

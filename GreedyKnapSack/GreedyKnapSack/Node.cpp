@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <string>
+#include "Loot.cpp"
 using namespace std;
 
 class Node {
@@ -15,4 +16,15 @@ public:
 	Node* LHNode;
 	Node* RHNode;
 	Node* parent;
+
+//	Node(Loot item, Node left, Node right, Node mom) {
+
+	//}
+};
+
+class BST {
+
+public:
+
+
 };
