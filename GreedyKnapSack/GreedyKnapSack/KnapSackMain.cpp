@@ -38,7 +38,7 @@ double findRatio(int w, int v);
 class PQ {
 
 public:
-	void enqueue(Node node, Node parent, Loot loot){
+	void enqueue(Node node, Node parent, Loot loot, Node root){
 		while (Loot heldItem >= 0) {
 			//we need a root, to then put nodes on the left
 			if (loot.ratio < node->heldItem) { // if the heldItem is less than node, then go left
@@ -64,6 +64,8 @@ public:
 				}
 			}
 		}
+			else
+			heldItem=root;
 	}
 
 	void dequeue(Node node, Node parent){
