@@ -8,8 +8,34 @@
 #include <fstream>
 #include <cstring>
 
-#include "Loot"
+//#include "Loot.cpp"
 using namespace std;
+
+double findRatio(int w, int v);
+int Dequeue(Node node, Node parent);
+
+struct Loot {
+
+	string name;
+	int weight;
+	int value;
+	double ratio;
+
+};
+
+
+struct Node {
+
+	Loot* heldItem;
+	Node* LHNode;
+	Node* RHNode;
+	Node* parent;
+
+};
+
+struct PQ {
+
+};
 
 int main() {
 
@@ -21,15 +47,51 @@ int main() {
 	fileIn >> numGems >> bagSize;
 
 	// create Loot objects for each item
+	Loot * insert = new Loot[numGems];
+	//std::vector<Loot> testArray;
 	for (int i = 0; i < numGems; i++) {
-		int n, w, v;
-		fileIn >> n >> w >> v;
-		Loot* i = new Loot(n, w, v);
-		cout << n << endl;
-		delete i;
+		string n;
+		int w, v;
+		fileIn >> n;
+		fileIn >> w >> v;
+		insert[i].name = n;
+		insert[i].weight = w;
+		insert[i].value = v;
+		insert[i].ratio = findRatio(w, v);
+
+
+		//cout << test[i].name << endl;
 	}
+
+	for (int i = 0; i < numGems; i++) {
+		//delete &test[i];
+	}
+
+	// done - read file in
+	//create object for it
+	//put it in the queue based on ratio
+	//pull items off the queue untill bag is full
+	//print out items in bag
+
+
 	return 0;
 }
+
+double findRatio(int w, int v) {
+	return (w / v);
+}
+
+int PQ::Dequeue(Node* node, Node* parent)
+{
+	Node derpNode = node;
+	while (node->RHNode) {
+		parent = node;
+		node = node.RHNode;
+	}
+	delete derpNode;
+}
+
+
 
 
 
