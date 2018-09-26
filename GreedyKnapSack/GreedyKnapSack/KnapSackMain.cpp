@@ -31,6 +31,7 @@ struct Node {
 
 //where do we create a node?
 
+
 double findRatio(int w, int v);
 //int Dequeue(Node node, Node parent);
 
@@ -40,11 +41,11 @@ public:
 	void enqueue(Node node, Node parent, Loot loot){
 		while (Loot heldItem >= 0) {
 			//we need a root, to then put nodes on the left
-			if (loot.ratio < node->heldItem) {
+			if (loot.ratio < node->heldItem) { // if the heldItem is less than node, then go left
 				if (node->LHNode) {
 					node = node->LHNode;
 				}
-				else {
+				else { // else go right
 					node->LHNode = new node((heldItem.ratio = ratio));
 						return();
 				}
