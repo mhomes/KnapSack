@@ -21,15 +21,13 @@ public:
 		cout << name << endl;
 	}
 
+private:
+
+	double findRatio(int w, int v) {
+		return (w / v);
+	}
+
 };
-
-int main() {
-
-	Loot test;
-	test.value = 10l;
-	test.printName();
-	return 0;
-}
 
 /*	struct Loot {
 
