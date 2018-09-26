@@ -12,7 +12,7 @@ class PQ {
 
 };
 
-int PQ::Dequeue(Node * node, Node * parent)
+int PQ::Dequeue(Node* node, Node* parent)
 {
 	Node derpNode = node;
 	while (node->RHNode) {
@@ -22,7 +22,7 @@ int PQ::Dequeue(Node * node, Node * parent)
 	delete derpNode;
 }
 
-void PQ::Enqueue(double newRatio, Node * node)
+void PQ::Enqueue(double newRatio, Node* node)
 {
 	while (true) {
 		if (newRatio < node->heldItem->ratio) {

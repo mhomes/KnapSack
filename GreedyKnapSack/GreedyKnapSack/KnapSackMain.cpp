@@ -8,8 +8,58 @@
 #include <fstream>
 #include <cstring>
 
-#include "Loot"
+//#include "Loot.cpp"
 using namespace std;
+
+struct Loot {
+
+	string name;
+	int weight;
+	int value;
+	double ratio;
+
+};
+
+struct Node {
+
+	Loot* heldItem;
+	Node* LHNode;
+	Node* RHNode;
+	Node* parent;
+
+};
+
+double findRatio(int w, int v);
+//int Dequeue(Node node, Node parent);
+
+class PQ {
+
+public:
+	void enqueue(Node node, Node parent){
+
+	}
+
+	void dequeue(Node node, Node parent){
+
+	}
+
+	void print(Node* root) {
+		if (root->LHNode != NULL) {
+			cout << root->.LHNode->heldItem->name << endl;
+			print(root->LHNode)
+		}
+		if (root->RHNode != NULL) {
+			cout << root->.RHNode->heldItem->ratio << endl;
+			print(root->RHNode)
+		}
+		else
+			return();
+	}
+
+private:
+	Node root;
+
+};
 
 int main() {
 
@@ -21,15 +71,49 @@ int main() {
 	fileIn >> numGems >> bagSize;
 
 	// create Loot objects for each item
+	Loot * insert = new Loot[numGems];
+	Node * node;
+	PQ Q;
+
+	Node rootNode.parent = NULL;
+	Q.root = rootNode;
+
 	for (int i = 0; i < numGems; i++) {
-		int n, w, v;
-		fileIn >> n >> w >> v;
-		Loot* i = new Loot(n, w, v);
-		cout << n << endl;
-		delete i;
+		string n;
+		int w, v;
+		fileIn >> n;
+		fileIn >> w >> v;
+		insert[i].name = n;
+		insert[i].weight = w;
+		insert[i].value = v;
+		insert[i].ratio = findRatio(w, v);
+
+		node->heldItem = insert;
+		Q.enqueue(node);
+
+		//cout << test[i].name << endl;
 	}
+
+	for (int i = 0; i < numGems; i++) {
+		//delete &test[i];
+	}
+
+	// done - read file in
+	//create object for it
+	//put it in the queue based on ratio
+	//pull items off the queue untill bag is full
+	//print out items in bag
+
+
 	return 0;
 }
+
+double findRatio(int w, int v) {
+	return (w / v);
+}
+
+
+
 
 
 
