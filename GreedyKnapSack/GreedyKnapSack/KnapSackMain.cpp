@@ -38,61 +38,57 @@ double findRatio(int w, int v);
 class PQ {
 
 public:
-	void enqueue(Node node, Node parent, Loot loot, Node root){
-		while (Loot heldItem >= 0) {
-			//we need a root, to then put nodes on the left
-			if (loot.ratio < node->heldItem) { // if the heldItem is less than node, then go left
-				if (node->LHNode) {
-					node = node->LHNode;
-				}
-				else { // else go right
-					node->LHNode = new node((heldItem.ratio = ratio));
-						return();
-				}
-			else
-				if (node->RHNode){
-					node = node->RHNode;
-				}
-			}
-				else{
-					if (node->RHNode){
-						node = node->RHNode;
-				}
-					else{
-						Node.RHNode = new node(value);
-							return();
-				}
-			}
+	Node * root;
+
+	void enqueue(Node* node, Node* parent){
+		cout << "at the start of the enqueue" << endl;
+		if (parent->LHNode = NULL && node->heldItem->ratio < parent->heldItem->ratio) {
+			cout << "if1" << endl;
+			parent->LHNode = node;
+			node->parent = parent;
+			return;
 		}
-			else
-			heldItem=root;
+		if(parent->RHNode = NULL && node->heldItem->ratio > parent->heldItem ->ratio){
+			cout << "if2" << endl;
+			parent->RHNode = node;
+			node->parent = parent;
+			return;
+		}
+		cout << "enqueue 1" << endl;
+		if (node->heldItem->ratio < parent->heldItem->ratio) {
+			cout << "if3" << endl;
+			enqueue(node, parent->LHNode);
+		}
+		cout << "enqueue 2" << endl;
+		if (node->heldItem->ratio > parent->heldItem->ratio) {
+			cout << "if4" << endl;
+			enqueue(node, parent->RHNode);
+		}
+		cout << "at the end of the enqueue" << endl;
 	}
 
-	void dequeue(Node node, Node parent){
-		Node CurrentNode = node;
-		while (Node.RHNode !=0) {
-			parent = node;
-			node = Node.RHNode;
-		}
-		delete CurrentNode;
-	}
+	/*void dequeue(Node node, Node parent) {
+		if node = root;
+			
+		if (node.LHNode != NULL)
+			node.LHNode.parent = node.parent;
+		delete node;
+	}*/
 
-	void print(Node* root) {
+
+	void printQ(Node* root) {
 		cout<<root->heldItem->name << endl;
 		if (root->LHNode != NULL) {
 			cout << root->LHNode->heldItem->name << endl;
-			print(root->LHNode);
+			printQ(root->LHNode);
 		}
 		if (root->RHNode != NULL) {
 			cout << root->RHNode->heldItem->name << endl;
-			print(root->RHNode);
+			printQ(root->RHNode);
 		}
 		else
-			return();
+			return;
 	}
-
-private:
-	Node root;
 
 };
 
@@ -106,16 +102,28 @@ int main() {
 	fileIn >> numGems >> bagSize;
 
 	// create Loot objects for each item
-	Loot * insert = new Loot[numGems];
-	Node * node;
+	Loot* insert = new Loot[numGems];
+	Loot rootInsert;
+	Node * node = new Node[numGems];
 	PQ Q;
+	cout << "1" << endl;
+	Node * rootNode = new Node;
+	//rootNode->parent = NULL;
 
-	Node rootNode.parent = NULL;
+	string n;
+	int w, v;
+	cout << "2" << endl;
+	fileIn >> w >> v;
+	rootInsert.name = n;
+	rootInsert.weight = w;
+	rootInsert.value = v;
+	rootInsert.ratio = findRatio(w, v);
+	cout << "2a" << endl;
+	rootNode->heldItem = &rootInsert;
+	cout << "3" << endl;
 	Q.root = rootNode;
-
-	for (int i = 0; i < numGems; i++) {
-		string n;
-		int w, v;
+	cout << "we are right before the for loop" << endl;
+	for (int i = 1; i < numGems; i++) {
 		fileIn >> n;
 		fileIn >> w >> v;
 		insert[i].name = n;
@@ -123,21 +131,23 @@ int main() {
 		insert[i].value = v;
 		insert[i].ratio = findRatio(w, v);
 
-		node->heldItem = insert;
-		Q.enqueue(node);
+		cout << "we are right IN the for loop" << endl;
+
+		node[i].heldItem = &insert[i];
+		cout << "we are right IN the for loop Still" << endl;
+		Q.enqueue(node[i], rootNode);
 
 		//cout << test[i].name << endl;
 	}
 
-	for (int i = 0; i < numGems; i++) {
-		//delete &test[i];
-	}
-
+	cout << "we are after the for loop" << endl;
+	Q.printQ(rootNode);
 	// done - read file in
 	//create object for it
 	//put it in the queue based on ratio
 	//pull items off the queue untill bag is full
 	//print out items in bag
+
 
 
 	return 0;
