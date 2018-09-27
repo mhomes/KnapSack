@@ -1,8 +1,8 @@
 // GreedyKnapSack.cpp
-// Allen Burris
+// Authors: Allen Burris, Matthew Homes
 // Algorithms Poject 1:
 // Greedy KnapSack - Test File Creator
-//
+//Finished: 9-25-18
 
 #include <iostream>
 #include <fstream>

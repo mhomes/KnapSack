@@ -1,7 +1,8 @@
 // GreedyKnapSack.cpp
-// Allen Burris
+// Authors: Allen Burris, Matthew Homes
 // Algorithms Poject 1:
 // Greedy KnapSack - Main File
+//Finished: 9-27-18, winning
 //
 
 #include <iostream>
@@ -20,7 +21,7 @@ struct Loot {
 	double ratio;
 
 	void print() {
-		cout << name << " " << weight << " " << value << " " /*<< ratio*/ << endl;
+		cout << name << " " << value << " " << weight << " " /*<< ratio */<< endl;
 	}
 
 };
@@ -77,25 +78,32 @@ public:
 
 	Loot* dequeue(Node* rightMostNode) {
 
-		if (rightMostNode->RHNode != NULL) {
-			dequeue(rightMostNode->RHNode);
-		}
-		else if (rightMostNode->LHNode == NULL)
+		if (rightMostNode->RHNode != NULL)
 		{
-			rightMostNode->parent->RHNode = NULL;
-			return rightMostNode->heldItem;
+			return dequeue(rightMostNode->RHNode);
 		}
-		else {
-			rightMostNode->parent->RHNode = rightMostNode->LHNode;
+		else if (rightMostNode->LHNode!= NULL)
+		{
 			rightMostNode->LHNode->parent = rightMostNode->parent;
-			return rightMostNode->heldItem;
+			if (rightMostNode->parent != NULL)
+				rightMostNode->parent->RHNode = rightMostNode->LHNode;
+			else
+				root = rightMostNode->LHNode;
 		}
+		else
+		{
+			if (rightMostNode->parent != NULL)
+				rightMostNode->parent->RHNode = NULL;
+			else
+				root = NULL;
+		}
+		return rightMostNode->heldItem;
 
 	}
 
 	void setRoot(Node* node) {
 		node->parent = NULL;
-		root = node;
+		this->root = node;
 
 	}
 
@@ -120,7 +128,8 @@ public:
 
 int main() {
 
-	int count, numGems, bagSize, currBag;
+	int numGems, bagSize;
+	int currBag = 0;
 
 	//file in
 	ifstream fileIn;
@@ -155,54 +164,37 @@ int main() {
 		insert[i].weight = w;
 		insert[i].value = v;
 		insert[i].ratio = findRatio(v, w);
-					 
+
 		node[i].heldItem = &insert[i];
 
-		Q.enqueue(&node[i], Q.getRoot());	
-	} 
-	Q.printQ(Q.getRoot());
+		Q.enqueue(&node[i], Q.getRoot());
+	}
 	cout << "_______________________" << endl;
 
-	Loot* test;
-	for(int i = 1; i < numGems; i++) {
-		test = Q.dequeue(Q.getRoot());
-		test->print();
-		cout << "_______________________" << i <<endl;
-	}
-	Q.printQ(Q.getRoot());
+	Loot ** printingItem = new Loot*[numGems];
 
-/*	Loot * printingItem;
-	for (int i = 0; currBag <= bagSize; i++) {
-		printingItem = Q.dequeue(Q.getRoot());
-		if (printingItem->weight > bagSize - currBag)
-			break;
-		else {
-			printingItem->print();
-			currBag += printingItem->weight;
-		}*/
-
-
-
-	// done - read file in
-	//done - create object for it
-	//done - put it in the queue based on ratio
-	//pull items off the queue untill bag is full
-	//print out items in bag
-
-	for (int i = 1; i < numGems; i++) {
-		//delete node[i];
+	int solSize = 0, totalValue = 0, count = 0;
+	while (currBag <= bagSize) {
+		printingItem[count] = Q.dequeue(Q.getRoot());
+		currBag += printingItem[count]->weight;
+		totalValue += printingItem[count]->value;
+		count++;
+		solSize++;
 	}
 
-	return 0;
+	cout << solSize << endl << currBag << endl << totalValue << endl;
+	for (int i = 0; i < count; i++) {
+		printingItem[i]->print();
+	}
+
+		return 0;
 }
+
 
 double findRatio(int v, int w) {
 	double out = (1.0 * v / w);
 	return (out);
 }
-
-
-
 
 
 
