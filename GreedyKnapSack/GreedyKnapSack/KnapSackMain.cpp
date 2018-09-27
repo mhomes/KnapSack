@@ -11,12 +11,17 @@
 //#include "Loot.cpp"
 using namespace std;
 
+double findRatio(int w, int v);
+
 struct Loot {
 
 	string name;
-	int weight;
-	int value;
+	int weight, value;
 	double ratio;
+
+	void print() {
+		cout << name << " " << weight << " " << value << " " << ratio << endl;
+	}
 
 };
 
@@ -27,45 +32,47 @@ struct Node {
 	Node* RHNode;
 	Node* parent;
 
+	Node() { LHNode = RHNode = parent = NULL; }
+
+	void printNode(Node* node) {
+		cout << node->heldItem->name << endl;
+	}
+
 };
 
-//where do we create a node?
 
-
-double findRatio(int w, int v);
-//int Dequeue(Node node, Node parent);
-
+// Priority Q
 class PQ {
 
-public:
 	Node * root;
+public:
 
 	void enqueue(Node* node, Node* parent){
 
-		cout << "at the start of the enqueue" << endl;
+		//cout << "at the start of the enqueue" << endl;
 		if (parent->LHNode == NULL && node->heldItem->ratio < parent->heldItem->ratio) {
-			cout << "if1" << endl;
+			//cout << "if1" << endl;
 			parent->LHNode = node;
 			node->parent = parent;
 			return;
 		}
-		if(parent->RHNode == NULL && node->heldItem->ratio > parent->heldItem ->ratio){
-			cout << "if2" << endl;
+		else if(parent->RHNode == NULL && node->heldItem->ratio > parent->heldItem ->ratio){
+			//cout << "if2" << endl;
 			parent->RHNode = node;
 			node->parent = parent;
 			return;
 		}
-		cout << "enqueue 1" << endl;
+		//cout << "enqueue 1" << endl;
 		if (node->heldItem->ratio < parent->heldItem->ratio) {
-			cout << "if3" << endl;
+			//cout << "if3" << endl;
 			enqueue(node, parent->LHNode);
 		}
-		cout << "enqueue 2" << endl;
+		//cout << "enqueue 2" << endl;
 		if (node->heldItem->ratio > parent->heldItem->ratio) {
-			cout << "if4" << endl;
+			//cout << "if4" << endl;
 			enqueue(node, parent->RHNode);
 		}
-		cout << "at the end of the enqueue" << endl;
+		//cout << "at the end of the enqueue" << endl;
 	}
 
 	/*void dequeue(Node node, Node parent) {
@@ -76,26 +83,32 @@ public:
 		delete node;
 	}*/
 
+	void setRoot(Node* node) {
+		root = node;
+	}
+
+	Node* getRoot() {
+		return root;
+	}
 
 	void printQ(Node* root) {
-		cout<<root->heldItem->name << endl;
+		root->heldItem->print();
 		if (root->LHNode != NULL) {
-			cout << root->LHNode->heldItem->name << endl;
+			//root->LHNode->heldItem->print();
 			printQ(root->LHNode);
 		}
 		if (root->RHNode != NULL) {
-			cout << root->RHNode->heldItem->name << endl;
+			//root->RHNode->heldItem->print();
 			printQ(root->RHNode);
 		}
-		else
-			return;
+		return;
 	}
 
 };
 
 int main() {
 
-	int count, numGems, bagSize;
+	int count, numGems, bagSize, curBagSize;
 
 	//file in
 	ifstream fileIn;
@@ -107,45 +120,44 @@ int main() {
 	Loot rootInsert;
 	Node* node = new Node[numGems];
 	PQ Q;
-	cout << "1" << endl;
 	Node * rootNode = new Node;
-	//rootNode->parent = NULL;
 
 	string n;
 	int w, v;
-	cout << "2" << endl;
+
+	fileIn >> n;
 	fileIn >> w >> v;
+
 	rootInsert.name = n;
 	rootInsert.weight = w;
 	rootInsert.value = v;
 	rootInsert.ratio = findRatio(w, v);
-	cout << "2a" << endl;
 	rootNode->heldItem = &rootInsert;
-	cout << "3" << endl;
-	Q.root = rootNode;
-	cout << "we are right before the for loop" << endl;
+
+	Q.setRoot(rootNode);
+
 	for (int i = 1; i < numGems; i++) {
 		fileIn >> n;
 		fileIn >> w >> v;
 		insert[i].name = n;
 		insert[i].weight = w;
 		insert[i].value = v;
-		insert[i].ratio = findRatio(w, v);
-
-		cout << "we are right IN the for loop" << endl;
-
+		insert[i].ratio = findRatio(v, w);
+					 
 		node[i].heldItem = &insert[i];
-		cout << "we are right IN the for loop Still" << endl;
-		Q.enqueue(&node[i], rootNode);
 
-		//cout << test[i].name << endl;
-	}
+		Q.enqueue(&node[i], Q.getRoot());	
+	} 
 
 	cout << "we are after the for loop" << endl;
-	Q.printQ(rootNode);
+	Q.printQ(Q.getRoot());
+
+
+
+
 	// done - read file in
-	//create object for it
-	//put it in the queue based on ratio
+	//done - create object for it
+	//done - put it in the queue based on ratio
 	//pull items off the queue untill bag is full
 	//print out items in bag
 
@@ -156,8 +168,9 @@ int main() {
 	return 0;
 }
 
-double findRatio(int w, int v) {
-	return (w / v);
+double findRatio(int v, int w) {
+	double out = (1.0 * v / w);
+	return (out);
 }
 
 
