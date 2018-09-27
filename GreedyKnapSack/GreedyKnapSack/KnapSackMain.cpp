@@ -41,14 +41,15 @@ public:
 	Node * root;
 
 	void enqueue(Node* node, Node* parent){
+
 		cout << "at the start of the enqueue" << endl;
-		if (parent->LHNode = NULL && node->heldItem->ratio < parent->heldItem->ratio) {
+		if (parent->LHNode == NULL && node->heldItem->ratio < parent->heldItem->ratio) {
 			cout << "if1" << endl;
 			parent->LHNode = node;
 			node->parent = parent;
 			return;
 		}
-		if(parent->RHNode = NULL && node->heldItem->ratio > parent->heldItem ->ratio){
+		if(parent->RHNode == NULL && node->heldItem->ratio > parent->heldItem ->ratio){
 			cout << "if2" << endl;
 			parent->RHNode = node;
 			node->parent = parent;
@@ -104,7 +105,7 @@ int main() {
 	// create Loot objects for each item
 	Loot* insert = new Loot[numGems];
 	Loot rootInsert;
-	Node * node = new Node[numGems];
+	Node* node = new Node[numGems];
 	PQ Q;
 	cout << "1" << endl;
 	Node * rootNode = new Node;
@@ -135,7 +136,7 @@ int main() {
 
 		node[i].heldItem = &insert[i];
 		cout << "we are right IN the for loop Still" << endl;
-		Q.enqueue(node[i], rootNode);
+		Q.enqueue(&node[i], rootNode);
 
 		//cout << test[i].name << endl;
 	}
@@ -148,7 +149,9 @@ int main() {
 	//pull items off the queue untill bag is full
 	//print out items in bag
 
-
+	for (int i = 1; i < numGems; i++) {
+		//delete node[i];
+	}
 
 	return 0;
 }
