@@ -20,7 +20,7 @@ struct Loot {
 	double ratio;
 
 	void print() {
-		cout << name << " " << weight << " " << value << " " << ratio << endl;
+		cout << name << " " << weight << " " << value << " " /*<< ratio*/ << endl;
 	}
 
 };
@@ -75,16 +75,28 @@ public:
 		//cout << "at the end of the enqueue" << endl;
 	}
 
-	/*void dequeue(Node node, Node parent) {
-		if node = root;
-			
-		if (node.LHNode != NULL)
-			node.LHNode.parent = node.parent;
-		delete node;
-	}*/
+	Loot* dequeue(Node* rightMostNode) {
+
+		if (rightMostNode->RHNode != NULL) {
+			dequeue(rightMostNode->RHNode);
+		}
+		else if (rightMostNode->LHNode == NULL)
+		{
+			rightMostNode->parent->RHNode = NULL;
+			return rightMostNode->heldItem;
+		}
+		else {
+			rightMostNode->parent->RHNode = rightMostNode->LHNode;
+			rightMostNode->LHNode->parent = rightMostNode->parent;
+			return rightMostNode->heldItem;
+		}
+
+	}
 
 	void setRoot(Node* node) {
+		node->parent = NULL;
 		root = node;
+
 	}
 
 	Node* getRoot() {
@@ -108,7 +120,7 @@ public:
 
 int main() {
 
-	int count, numGems, bagSize, curBagSize;
+	int count, numGems, bagSize, currBag;
 
 	//file in
 	ifstream fileIn;
@@ -148,10 +160,26 @@ int main() {
 
 		Q.enqueue(&node[i], Q.getRoot());	
 	} 
+	Q.printQ(Q.getRoot());
+	cout << "_______________________" << endl;
 
-	cout << "we are after the for loop" << endl;
+	Loot* test;
+	for(int i = 1; i < numGems; i++) {
+		test = Q.dequeue(Q.getRoot());
+		test->print();
+		cout << "_______________________" << i <<endl;
+	}
 	Q.printQ(Q.getRoot());
 
+/*	Loot * printingItem;
+	for (int i = 0; currBag <= bagSize; i++) {
+		printingItem = Q.dequeue(Q.getRoot());
+		if (printingItem->weight > bagSize - currBag)
+			break;
+		else {
+			printingItem->print();
+			currBag += printingItem->weight;
+		}*/
 
 
 
