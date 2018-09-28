@@ -174,12 +174,18 @@ int main() {
 	Loot ** printingItem = new Loot*[numGems];
 
 	int solSize = 0, totalValue = 0, count = 0;
-	while (currBag <= bagSize) {
+	while (currBag < bagSize) {
 		printingItem[count] = Q.dequeue(Q.getRoot());
-		currBag += printingItem[count]->weight;
-		totalValue += printingItem[count]->value;
-		count++;
-		solSize++;
+		if ((printingItem[count]->weight + currBag) > bagSize) {
+			printingItem[count] = NULL;
+			currBag = bagSize;
+		}
+		else {
+			currBag += printingItem[count]->weight;
+			totalValue += printingItem[count]->value;
+			count++;
+			solSize++;
+		}
 	}
 
 	cout << solSize << endl << currBag << endl << totalValue << endl;
