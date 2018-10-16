@@ -1,9 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\GreedyKnapSack",
+    "\\Dynamic Programming",
     "\\GreedyKnapSack\\GreedyKnapSack"
   ],
-  "SelectedNode": "\\GreedyKnapSack\\GreedyKnapSack\\GreedyKnapSack.cpp",
+  "SelectedNode": "\\Dynamic Programming\\main.cpp",
   "PreviewInSolutionExplorer": false
 }
