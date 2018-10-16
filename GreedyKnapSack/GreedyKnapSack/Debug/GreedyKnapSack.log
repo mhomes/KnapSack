@@ -1,4 +1,1 @@
-﻿  GreedyKnapSack.cpp
-d:\github\knapsack\greedyknapsack\greedyknapsack\greedyknapsack.cpp(30): error C2065: 'Loot': undeclared identifier
-d:\github\knapsack\greedyknapsack\greedyknapsack\greedyknapsack.cpp(30): error C2146: syntax error: missing ';' before identifier 'test'
-d:\github\knapsack\greedyknapsack\greedyknapsack\greedyknapsack.cpp(30): error C2065: 'test': undeclared identifier
+﻿
