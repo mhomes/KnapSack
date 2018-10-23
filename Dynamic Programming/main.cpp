@@ -33,23 +33,27 @@ int main() {
 
 	//filling the top row of the Matrix with 0's
 	// gives the if something to compare to. 
-	for (int i = 0; i < bagSize; i++)
-		Matrix[0][i] = 0;
+	for (int w = 0; w < bagSize; w++)
+		Matrix[0][w] = 0;
 
-	//Filling the Matrix with Real Values
+	//populating the rest of the matrix
 	for (int i = 1; i < numGems; i++) {
-
 		fileIn >> n;
 		fileIn >> w >> v;
 		holdThis[i].name = n;
 		holdThis[i].weight = w;
 		holdThis[i].value = v;
+	}
+
+	//Filling the Matrix with Real Values
+	for (int i = 1; i < numGems; i++) {
 
 		for (int w = 0; w <= bagSize; w++) {
+			
 			if (holdThis[i].weight > w) {
 				Matrix[i][w] = Matrix[i - 1][w];
 			}
-			else if (holdThis[i].weight < w) {
+			else if (holdThis[i].weight <= w) {
 				if (Matrix[i - 1][w] > (holdThis[i].value + Matrix[i - 1][w - holdThis[i].weight]))
 					Matrix[i][w] = Matrix[i - 1][w];
 				else Matrix[i][w] = (holdThis[i].value + Matrix[i - 1][w - holdThis[i].weight]);
@@ -66,21 +70,42 @@ int main() {
 		}
 		cout << endl;
 	}
+/*
+	Loot contents[numGems];
 
-	/*STOP*/
+	w = bagSize;
+	int i = numGems;
+	int numContents = 0;
 
-	//Reading Output off the Matrix
-	for (int w = bagSize; w <= 0; w--) {
-		if (holdThis[i].weight > w) {
-			Matrix[i][w] = Matrix[i - 1][w];
+	while (w > 0 && i > 0) {
+		if (Matrix[i][w] == Matrix[i - 1][w]) {
+			i--; //we did not add this item.
 		}
-		else if (holdThis[i].weight < w) {
-			if (Matrix[i - 1][w] > (holdThis[i].value + Matrix[i - 1][w - holdThis[i].weight]))
-				Matrix[i][w] = Matrix[i - 1][w];
-			else Matrix[i][w] = (holdThis[i].value + Matrix[i - 1][w - holdThis[i].weight]);
+		else {
+			contents[numContents] = holdThis[i];
+			w = w - holdThis[i].weight; //we added the item and remove its weight from w
+			i--;
+			numContents++;
 		}
-
 	}
+
+	//Format output
+	int weight, value = 0;
+	cout << numContents << endl;
+	for (int i = 0; i <= numContents; i++) 
+		weight += contents[i].weight;
+	
+	cout << weight << endl;
+	for (int i = 0; i <= numContents; i++) 
+		value += contents[i].value;
+
+	cout << value << endl;
+	for (int i = 0; i <= numContents; i++) {
+		cout << contents[i].name;
+		cout << contents[i].value;
+		cout << contents[i].weight;
+	}
+	*/
 
 	return 0;
 }
