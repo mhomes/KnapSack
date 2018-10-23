@@ -29,7 +29,7 @@ int main() {
 	fileIn >> numGems >> bagSize;
 
 	int Matrix[numGems + 1][bagSize];
-	Loot holdThis[numGems];
+	Loot holdThis[numGems+1];
 
 	//filling the top row of the Matrix with 0's
 	// gives the if something to compare to. 
@@ -37,7 +37,7 @@ int main() {
 		Matrix[0][w] = 0;
 
 	//populating the rest of the matrix
-	for (int i = 1; i < numGems; i++) {
+	for (int i = 1; i <= numGems; i++) {
 		fileIn >> n;
 		fileIn >> w >> v;
 		holdThis[i].name = n;
@@ -46,7 +46,7 @@ int main() {
 	}
 
 	//Filling the Matrix with Real Values
-	for (int i = 1; i < numGems; i++) {
+	for (int i = 1; i <= numGems; i++) {
 
 		for (int w = 0; w <= bagSize; w++) {
 			
