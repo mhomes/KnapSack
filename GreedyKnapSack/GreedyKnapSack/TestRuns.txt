@@ -16,9 +16,9 @@ Test 1:
 	
 	output:
 	_______________________
-	3
-	25
-	32
+	3 num items
+	25 weight of items
+	32 value of items
 	4 10 2
 	0 4 7
 	1 18 16
