@@ -28,7 +28,8 @@ int main() {
 	fileIn.open("TestFile.txt");
 	fileIn >> numGems >> bagSize;
 
-	int Matrix[numGems + 1][bagSize+1];
+	int Matrix[numGems + 1][bagSize + 1];
+	bool companionMatrix[numGems + 1][bagSize + 1];
 	Loot holdThis[numGems+1];
 
 	//filling the top row of the Matrix with 0's
@@ -51,13 +52,17 @@ int main() {
 			
 			if (holdThis[i].weight > w) {
 				Matrix[i][w] = Matrix[i - 1][w];
+				companionMatrix[i][w] = false;
 			}
 			else if (holdThis[i].weight <= w) {
-				if (Matrix[i - 1][w] > (holdThis[i].value + Matrix[i - 1][w - holdThis[i].weight]))
+				if (Matrix[i - 1][w] > (holdThis[i].value + Matrix[i - 1][w - holdThis[i].weight])) {
 					Matrix[i][w] = Matrix[i - 1][w];
-				else Matrix[i][w] = (holdThis[i].value + Matrix[i - 1][w - holdThis[i].weight]);
-				
-				
+					companionMatrix[i][w] = false;
+				}
+				else { 
+					Matrix[i][w] = (holdThis[i].value + Matrix[i - 1][w - holdThis[i].weight]); 
+					companionMatrix[i][w] = true;
+				}
 			}
 
 		}
@@ -72,36 +77,35 @@ int main() {
 		cout << endl;
 	}
 
+	//get solutions
+	int numContents = 0;
+	int weight = 0, value = 0;
 	Loot contents[numGems];
 
-	w = bagSize+1;
-	int i = numGems;
-	int numContents = 0;
+	for (int i = numGems + 1; i > 0; i--) {
+		for (int w = bagSize + 1; w > 0; w--) {
+			if (companionMatrix[i][w] == false)
+				i--;
+			else if (companionMatrix[i][w] == true) {
+				w = w - holdThis[i].weight;
+				weight += holdThis[i].weight;
+				value += holdThis[i].value;
+				contents[numContents] = holdThis[i];
+				numContents++;
+				i--;
 
-	while (w > 0 && i > 0) {
-		if (Matrix[i][w] == Matrix[i - 1][w]) {
-			i--; //we did not add this item.
-		}
-		else {
-			contents[numContents] = holdThis[i];
-			w -= holdThis[i].weight; //we added the item and remove its weight from w
-			i--;
-			numContents++;
+				//cout << i << " " << w << endl;
+			}
+			else cout << "program machine broke" << endl;
 		}
 	}
+	cout << endl;
 
 	//Format output
-	int weight=0, value = 0;
-	cout << numContents << endl;
-	for (int i = 0; i <= numContents; i++) 
-		weight += contents[i].weight;
-	
+	cout << numContents << endl;	
 	cout << weight << endl;
-	for (int i = 0; i <= numContents; i++) 
-		value += contents[i].value;
-
 	cout << value << endl;
-	for (int i = 0; i <= numContents; i++) {
+	for (int i = 0; i < numContents; i++) {
 		cout << contents[i].name<<" ";
 		cout << contents[i].value<<" ";
 		cout << contents[i].weight << endl;
