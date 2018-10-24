@@ -18,22 +18,25 @@ struct Loot {
 
 };
 
-int supportFunction(int i, int w, int *Matrix[][], Loot *holdThis[], int numGems, int bagSize) {
+int supportFunction(int i, int w, int **Matrix, Loot **holdThis, int numGems, int bagSize) {
 	//some stuff so that we set i and w at the beginning. 
 	//and then can get rid of them. 
-	int i = tempi;
-	int w = tempw;
-	fun(i, w, *Matrix[][], holdThis[]); //last position in matrix. aka start point
-	delete tempi, tempw;
+	int tempi = i;
+	int tempw = w;
+	fun (i, w, **Matrix, holdThis); //last position in matrix. aka start point
+	delete &tempi;
+	delete &tempw;
+	// do we need to write the delete for the temps since the temps will not be used anywhere else
 }
 
 
 //remember that this is a recursive function so we need a base case and return statements. 
 //look at main.ccp and its matrix building loop for a format template. 
-int fun(int i, int w, int *Matrix[][], Loot *holdThis[]) {
+int fun(int i, int w, int **Matrix, Loot **holdThis) {
 	//bool companionMatrix[numGems + 1][bagSize + 1];
-	if (holdThis[i]->weight > w)
-		Matrix[i][w] = fun(i - 1, w, Matrix[][], holdThis[]); //fix this
+	if (holdThis[i]->weight > w) {
+		Matrix[i][w] = fun(i - 1, w, Matrix, holdThis);//fix this
+	}
 	else
 		if (Matrix[i][w] == fun(i - 1, w, Matrix, holdThis)) {
 			Matrix[i][w] = fun(i - 1, w, Matrix, holdThis);
@@ -41,7 +44,7 @@ int fun(int i, int w, int *Matrix[][], Loot *holdThis[]) {
 		}
 		else //if(Matrix[i][w] >= fun(i-1, w- holdThis[i].weight)) 
 		{
-			Matrix[i][w] = (holdThis[i].value + fun(i - 1, w - holdThis[i].weight, Matrix, holdThis));
+			Matrix[i][w] = (holdThis[i]->value + fun(i - 1, w - holdThis[i]->weight, Matrix, holdThis));
 		//companionMatrix[i][w] = true;
 		}
 }
