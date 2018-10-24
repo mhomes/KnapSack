@@ -18,17 +18,17 @@ struct Loot {
 
 };
 
-int Matrix[numGems + 1][bagSize + 1];
-bool companionMatrix[numGems + 1][bagSize + 1];
 
-int fun(int i, int w) {
-	if (Matrix[i][w] == fun(i - 1, w)) {
-		fun(i - 1, w);
+
+int fun(int i, int w, int **Matrix, Loot *holdThis, int numGems, int bagSize) {
+	bool companionMatrix[numGems + 1][bagSize + 1];
+	if (Matrix[i][w] == fun(i - 1, w, Matrix, holdThis, numGems, bagSize)) {
+		fun(i - 1, w, Matrix, holdThis,numGems, bagSize);
 		companionMatrix[i][w] = false;
 	}
 	else //if(Matrix[i][w] >= fun(i-1, w- holdThis[i].weight)) 
 	{
-		Matrix[i][w] = (holdThis[i].value + fun(i - 1, w - holdThis[i].weight);
+		Matrix[i][w] = (holdThis[i].value + fun(i - 1, w - holdThis[i].weight, Matrix, holdThis, numGems, bagSize));
 		companionMatrix[i][w] = true;
 	}
 }
@@ -37,11 +37,16 @@ int main() {
 
 	string n;
 	int numGems, bagSize, w, v;
+	
+	//bool companionMatrix[numGems + 1][bagSize + 1];
 
 	//file in
 	ifstream fileIn;
 	fileIn.open("TestFile.txt");
 	fileIn >> numGems >> bagSize;
+
+	//int **Matrix
+	int Matrix[numGems + 1][bagSize + 1];
 
 	Loot holdThis[numGems + 1];
 
@@ -63,7 +68,7 @@ int main() {
 	//variable redefining
 	int i = numGems + 1;
 	w = bagSize + 1;
-	fun(i, w);
+	fun(i, w, Matrix, holdThis, numGems, bagSize);
 
 	/*
 	//Format output
