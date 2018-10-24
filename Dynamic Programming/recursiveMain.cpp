@@ -21,7 +21,10 @@ struct Loot {
 int supportFunction(int i, int w, int *Matrix[][], Loot *holdThis[], int numGems, int bagSize) {
 	//some stuff so that we set i and w at the beginning. 
 	//and then can get rid of them. 
+	int i = tempi;
+	int w = tempw;
 	fun(i, w, *Matrix[][], holdThis[]); //last position in matrix. aka start point
+	delete tempi, tempw;
 }
 
 
