@@ -25,6 +25,8 @@ int supportFunction(int i, int w, int *Matrix[][], Loot *holdThis[], int numGems
 }
 
 
+//remember that this is a recursive function so we need a base case and return statements. 
+//look at main.ccp and its matrix building loop for a format template. 
 int fun(int i, int w, int *Matrix[][], Loot *holdThis[]) {
 	//bool companionMatrix[numGems + 1][bagSize + 1];
 	if (holdThis[i]->weight > w)
