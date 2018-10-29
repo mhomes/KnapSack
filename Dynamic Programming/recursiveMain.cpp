@@ -18,27 +18,35 @@ struct Loot {
 
 };
 
-int supportFunction(int i, int w, int *Matrix[][], Loot *holdThis[], int numGems, int bagSize) {
+int supportFunction(int i, int w, int **Matrix, Loot **holdThis, int numGems, int bagSize) {
 	//some stuff so that we set i and w at the beginning. 
 	//and then can get rid of them. 
-	fun(i, w, *Matrix[][], holdThis[]); //last position in matrix. aka start point
+	int tempi = i;
+	int tempw = w;
+	fun (i, w, **Matrix, holdThis); //last position in matrix. aka start point   // error its expecting 6 items in the parameter instead of 4
+	delete &tempi;
+	delete &tempw;
+	// do we need to write the delete for the temps since the temps will not be used anywhere else
 }
 
 
 //remember that this is a recursive function so we need a base case and return statements. 
 //look at main.ccp and its matrix building loop for a format template. 
-int fun(int i, int w, int *Matrix[][], Loot *holdThis[]) {
+int fun(int i, int w, int **Matrix, Loot **holdThis) {
 	//bool companionMatrix[numGems + 1][bagSize + 1];
-	if (holdThis[i]->weight > w)
-		Matrix[i][w] = fun(i - 1, w, Matrix[][], holdThis[]); //fix this
+	if (i == 0 || w == 0) //Base case
+		return 0;
+	if (holdThis[i]->weight > w) {
+		return Matrix[i][w] = fun(i - 1, w, Matrix, holdThis);//fix this
+	}
 	else
 		if (Matrix[i][w] == fun(i - 1, w, Matrix, holdThis)) {
-			Matrix[i][w] = fun(i - 1, w, Matrix, holdThis);
+			return Matrix[i][w] = fun(i - 1, w, Matrix, holdThis);
 		//companionMatrix[i][w] = false;
 		}
 		else //if(Matrix[i][w] >= fun(i-1, w- holdThis[i].weight)) 
 		{
-			Matrix[i][w] = (holdThis[i].value + fun(i - 1, w - holdThis[i].weight, Matrix, holdThis));
+			 return Matrix[i][w] = (holdThis[i]->value + fun(i - 1, w - holdThis[i]->weight, Matrix, holdThis));
 		//companionMatrix[i][w] = true;
 		}
 }
@@ -78,7 +86,7 @@ int main() {
 	//variable redefining
 	int i = numGems + 1;
 	w = bagSize + 1;
-	fun(i, w, Matrix, holdThis, numGems, bagSize);
+	fun(i, w, Matrix, holdThis, numGems, bagSize); // error its expecting 4 times in the parameter not 6
 
 	/*
 	//Format output
