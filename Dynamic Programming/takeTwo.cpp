@@ -16,11 +16,12 @@ struct Loot {
 	}
 };
 
-int fill(int i, int w, int matrix[][], Loot holdThis[], int numGems, int bagSize) {
+int fill(int i, int w, int matrix[][], Loot holdThis[]) {
 
-	if(holdThis[i].weight )
-	if (fill(i, w, matrix[i][w] > fill(i-1, w, matrix[][], holdThis)
-		return matrix[i][w];
+	if (holdThis[i].weight > w)
+		return fill(i - 1, w, matrix, holdThis);
+	else if(holdThis.weight <= w)
+
 }
 
 int main() {
@@ -46,7 +47,7 @@ int main() {
 		holdThis[i].value = v;
 	}
 
-	fill(numGems + 1, bagSize + 1, matrix, holdThis, numGems, bagSize);
+	fill(numGems + 1, bagSize + 1, matrix, holdThis);
 
 	return 0;
 }
