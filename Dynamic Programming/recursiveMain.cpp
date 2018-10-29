@@ -17,13 +17,13 @@ struct Loot {
 	}
 
 };
-
+//FIN - not needed
 int supportFunction(int i, int w, int **Matrix, Loot **holdThis, int numGems, int bagSize) {
 	//some stuff so that we set i and w at the beginning. 
 	//and then can get rid of them. 
 	int tempi = i;
 	int tempw = w;
-	fun (i, w, **Matrix, holdThis); //last position in matrix. aka start point   // error its expecting 6 items in the parameter instead of 4
+	fun(i, w, **Matrix, holdThis); //last position in matrix. aka start point   // error its expecting 6 items in the parameter instead of 4 
 	delete &tempi;
 	delete &tempw;
 	// do we need to write the delete for the temps since the temps will not be used anywhere else
@@ -86,7 +86,7 @@ int main() {
 	//variable redefining
 	int i = numGems + 1;
 	w = bagSize + 1;
-	fun(i, w, Matrix, holdThis, numGems, bagSize); // error its expecting 4 times in the parameter not 6
+	fun(i, w, Matrix, holdThis, numGems, bagSize); // error its expecting 4 times in the parameter not 6 //soln- this is a call to the wrong function;
 
 	/*
 	//Format output
