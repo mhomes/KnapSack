@@ -58,12 +58,11 @@ int main() {
 	int weight = 0, value = 0;
 	int numContents = 0;
 	int contents[numGems+1];
+	int i = numGems;
+	w = bagSize;
 
-	for (int i = numGems; i > 0; i--) {
-		cout <<"i = "<< i << endl;
-		for (int w = bagSize; w > 0; w--) {
-			cout << "w = " << i << endl;
-			if (matrix[i][w] = matrix[i - 1][w])
+	while (i > 0) {
+			if (matrix[i][w] == matrix[i - 1][w])
 				i--;
 			else {
 				w = w - holdThis[i].weight;
@@ -71,22 +70,34 @@ int main() {
 				value += holdThis[i].value;
 				contents[numContents] = i;
 				numContents++;
-				cout << "i-1 ";
 				i--;
-				cout << i << endl;
+			}
+	}
+
+	/*
+	for (int i = numGems; i > 0; i--) {
+		cout <<"i = "<< i << endl;
+		for (int w = bagSize; w > 0; w--) {
+			cout << "w = " << w << " i = " << i << endl;
+			if (matrix[i][w] == matrix[i - 1][w])
+				i--;
+			else {
+				w = w - holdThis[i].weight;
+				weight += holdThis[i].weight;
+				value += holdThis[i].value;
+				contents[numContents] = i;
+				numContents++;
+				//i--;
 				//cout << i << " " << w << endl;
 			}
 		}
-	}
+	}*/
 	
-	cout << "fuck commit dead" << endl;
 	cout << numContents << endl;
 	cout << weight << endl;
 	cout << value << endl;
 	for (int i = 0; i < numContents; i++) {
-		cout << holdThis[contents[i]].name << " ";
-		cout << holdThis[contents[i]].value << " ";
-		cout << holdThis[contents[i]].weight << endl;
+		holdThis[contents[i]].print();
 	}
 
 	return 0;

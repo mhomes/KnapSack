@@ -69,47 +69,33 @@ int main() {
 		
 	}
 
-	//Printing the Matrix
-	for (int i = 0; i <= numGems; i++) {
-		for (int w = 0; w <= bagSize; w++) {
-			cout <<" "<< Matrix[i][w]; 
-		}
-		cout << endl;
-	}
-
-	//get solutions
-	int numContents = 0;
 	int weight = 0, value = 0;
-	Loot contents[numGems];
+	int numContents = 0;
+	int contents[numGems + 1];
+	int i = numGems;
+	w = bagSize;
 
-	for (int i = numGems + 1; i > 0; i--) {
-		for (int w = bagSize + 1; w > 0; w--) {
-			if (companionMatrix[i][w] == false)
-				i--;
-			else if (companionMatrix[i][w] == true) {
-				w = w - holdThis[i].weight;
-				weight += holdThis[i].weight;
-				value += holdThis[i].value;
-				contents[numContents] = holdThis[i];
-				numContents++;
-				i--;
-
-				//cout << i << " " << w << endl;
-			}
-			else cout << "program machine broke" << endl;
+	while (i > 0) {
+		if (Matrix[i][w] == Matrix[i - 1][w])
+			i--;
+		else {
+			w = w - holdThis[i].weight;
+			weight += holdThis[i].weight;
+			value += holdThis[i].value;
+			contents[numContents] = i;
+			numContents++;
+			i--;
 		}
 	}
-	cout << endl;
 
 	//Format output
-	cout << numContents << endl;	
+	cout << numContents << endl;
 	cout << weight << endl;
 	cout << value << endl;
 	for (int i = 0; i < numContents; i++) {
-		cout << contents[i].name<<" ";
-		cout << contents[i].value<<" ";
-		cout << contents[i].weight << endl;
+		holdThis[contents[i]].print();
 	}
+
 	
 
 	return 0;
