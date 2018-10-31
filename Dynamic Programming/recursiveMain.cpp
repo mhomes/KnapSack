@@ -1,5 +1,8 @@
-
-
+/*
+Project: Dynamic 0-1 KnapSack
+Authors: Allen Burris, Mathew Homes
+Finished on: 10-31-2018
+*/
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -13,67 +16,39 @@ struct Loot {
 	double ratio;
 
 	void print() {
-		cout << name << " " << value << " " << weight << " " /*<< ratio */ << endl;
+		cout << name << " " << value << " " << weight << " " << endl;
 	}
-
 };
-//FIN - not needed
-int supportFunction(int i, int w, int **Matrix, Loot **holdThis, int numGems, int bagSize) {
-	//some stuff so that we set i and w at the beginning. 
-	//and then can get rid of them. 
-	int tempi = i;
-	int tempw = w;
-	fun(i, w, **Matrix, holdThis); //last position in matrix. aka start point   // error its expecting 6 items in the parameter instead of 4 
-	delete &tempi;
-	delete &tempw;
-	// do we need to write the delete for the temps since the temps will not be used anywhere else
-}
 
+int fill(int i, int w, int **matrix, Loot *holdThis) {
 
-//remember that this is a recursive function so we need a base case and return statements. 
-//look at main.ccp and its matrix building loop for a format template. 
-int fun(int i, int w, int **Matrix, Loot **holdThis) {
-	//bool companionMatrix[numGems + 1][bagSize + 1];
-	if (i == 0 || w == 0) //Base case
+	if (i == 0 || w == 0)
 		return 0;
-	if (holdThis[i]->weight > w) {
-		return Matrix[i][w] = fun(i - 1, w, Matrix, holdThis);//fix this
-	}
+	if (w < holdThis[i].weight)
+		matrix[i][w] = fill(i - 1, w, matrix, holdThis);
 	else
-		if (Matrix[i][w] == fun(i - 1, w, Matrix, holdThis)) {
-			return Matrix[i][w] = fun(i - 1, w, Matrix, holdThis);
-		//companionMatrix[i][w] = false;
-		}
-		else //if(Matrix[i][w] >= fun(i-1, w- holdThis[i].weight)) 
-		{
-			 return Matrix[i][w] = (holdThis[i]->value + fun(i - 1, w - holdThis[i]->weight, Matrix, holdThis));
-		//companionMatrix[i][w] = true;
-		}
+		matrix[i][w] = max(fill(i - 1, w, matrix, holdThis), (fill(i - 1, w - holdThis[i].weight, matrix, holdThis) + holdThis[i].value));
+
 }
 
 int main() {
 
 	string n;
 	int numGems, bagSize, w, v;
-	
-	//bool companionMatrix[numGems + 1][bagSize + 1];
 
-	//file in
 	ifstream fileIn;
 	fileIn.open("TestFile.txt");
 	fileIn >> numGems >> bagSize;
 
-	//int **Matrix
-	int Matrix[numGems + 1][bagSize + 1];
+	int** matrix = new int *[numGems + 1];
+	for (int i = 0; i <= numGems; i++)
+		matrix[i] = new int[bagSize + 1];
 
-	Loot holdThis[numGems + 1];
+	Loot* holdThis = new Loot[numGems + 1];
 
-	//filling the top row of the Matrix with 0's
-	// gives the if something to compare to. 
 	for (int w = 0; w <= bagSize; w++)
-		Matrix[0][w] = 0;
+		matrix[0][w] = 0;
 
-	//creating holdThis[]
 	for (int i = 1; i <= numGems; i++) {
 		fileIn >> n;
 		fileIn >> w >> v;
@@ -82,24 +57,33 @@ int main() {
 		holdThis[i].value = v;
 	}
 
+	fill(numGems, bagSize, matrix, holdThis);
 
-	//variable redefining
-	int i = numGems + 1;
-	w = bagSize + 1;
-	fun(i, w, Matrix, holdThis, numGems, bagSize); // error its expecting 4 times in the parameter not 6 //soln- this is a call to the wrong function;
+	int weight = 0, value = 0;
+	int numContents = 0;
+	int contents[numGems + 1];
+	int i = numGems;
+	w = bagSize;
 
-	/*
-	//Format output
+	while (i > 0) {
+		if (matrix[i][w] == matrix[i - 1][w])
+			i--;
+		else {
+			w = w - holdThis[i].weight;
+			weight += holdThis[i].weight;
+			value += holdThis[i].value;
+			contents[numContents] = i;
+			numContents++;
+			i--;
+		}
+	}
+
 	cout << numContents << endl;
 	cout << weight << endl;
 	cout << value << endl;
 	for (int i = 0; i < numContents; i++) {
-		cout << contents[i].name << " ";
-		cout << contents[i].value << " ";
-		cout << contents[i].weight << endl;
+		holdThis[contents[i]].print();
 	}
-	*/
-
 
 	return 0;
 }

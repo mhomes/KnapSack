@@ -1,5 +1,8 @@
-
-
+/*
+Project: Dynamic 0-1 KnapSack
+Authors: Allen Burris, Mathew Homes
+Finished on: 10-31-2018
+*/
 #include <iostream>
 #include <fstream>
 #include <cstring>
