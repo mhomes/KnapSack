@@ -1,8 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Dynamic Programming"
+    "\\backtracking",
+    "\\Dynamic Programming",
+    "\\GreedyKnapSack",
+    "\\GreedyKnapSack\\GreedyKnapSack"
   ],
-  "SelectedNode": "\\Dynamic Programming\\TestFileGenerator.cpp",
+  "SelectedNode": "\\GreedyKnapSack\\GreedyKnapSack\\KnapSackMain.cpp",
   "PreviewInSolutionExplorer": false
 }
