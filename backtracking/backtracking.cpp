@@ -9,6 +9,8 @@
 
 using namespace std;
 
+void checkNode(Node u);
+
 struct Loot {
 
 	string name;
@@ -37,6 +39,19 @@ struct Node {
 	}
 
 };
+bool promissing(Node v) {
+
+}
+
+void checkNode(Node v, int best) {
+	Node u;
+	if (v.heldItem->value > best)
+		best = v.heldItem->value;
+	if (promissing(v)) {
+		
+	}
+		
+}
 
 int main() {
 
@@ -62,7 +77,7 @@ int main() {
 
 	root.curWeight = 0;
 	root.curProfit = 0;
-	root.bound = 
+
 
 	return 0;
 	}
