@@ -9,18 +9,16 @@
 
 using namespace std;
 
-void checkNode(Node u);
-
 struct Loot {
 
 	string name;
-	int weight, value;
+	int weight, value, pos;
 	double ratio;
 
 	void print() {
-		cout << name << " " << value << " " << weight << " " /*<< ratio */ << endl;
+		cout << name <<" "<< pos <<" " << value << " " << weight << " " /*<< ratio */ << endl;
 	}
-}
+};
 
 struct Node {
 
@@ -39,15 +37,37 @@ struct Node {
 	}
 
 };
-bool promissing(Node v) {
 
+void getBound(Node v, int bagSize, Loot holdThis[]) {
+	int totWeight = v.curWeight;
+	int count = 0;
+	for (int i = v.heldItem->pos; totWeight >= bagSize; i++) {
+		totWeight += holdThis[i + 1].weight;
+		if (totWeight > bagSize) {
+			totWeight -= holdThis[i + 1].weight;
+			break;
+		}
+
+		count++;
+	}
+	v.curWeight = totWeight;
+
+	int bound = v.curProfit;
+	for (int i = v.heldItem->pos; i < count; i++) {
+		bound += holdThis[i + 1].value;
+	}
+	bound += (bagSize - totWeight) * (holdThis[(v.heldItem->pos + count)].value / holdThis[(v.heldItem->pos + count)].weight);
+	v.bound = bound;
 }
 
 void checkNode(Node v, int best) {
+
+	if (v.bound <= best)
+		return;
 	Node u;
 	if (v.heldItem->value > best)
 		best = v.heldItem->value;
-	if (promissing(v)) {
+	if (v.bound) {
 		
 	}
 		
@@ -72,6 +92,7 @@ int main() {
 		holdThis[i].name = n;
 		holdThis[i].weight = w;
 		holdThis[i].value = v;
+		holdThis[i].pos = i;
 	}
 	fileIn.close();
 
@@ -80,5 +101,4 @@ int main() {
 
 
 	return 0;
-	}
-};
+}
