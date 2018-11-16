@@ -27,9 +27,11 @@ bool promising(int i, int profit, int weight, Loot holdThis[], int bagSize, int 
 	float bound;
 
 	if (weight >= bagSize) {
+		cout << i << " is not promising" << endl;
 		return false;
 	}
 	else {
+		cout << "promise check" << endl;
 		j = i + 1;
 		bound = profit;
 		totalweight = weight;
@@ -39,36 +41,38 @@ bool promising(int i, int profit, int weight, Loot holdThis[], int bagSize, int 
 			totalweight = totalweight + holdThis[j].weight;
 			bound = bound + holdThis[j].value;
 			j++;
+			cout << bound << endl;
 		}
 		k = j;
-		if (k <= i)
-			bound = bound + (bagSize - totalweight) * holdThis[k].value / holdThis[k].weight;
-
+		cout << " k = " << k << endl;
+		if (k <= numGems)
+			bound = bound + ((bagSize - totalweight) * (holdThis[k].ratio));
+		cout << "bound of " << i << " is " << bound << endl;
 		return bound > maxprofit;
 	}
 
 }
 
-void sack(int i, int profit, int weight, Loot holdThis[], bool include[], int bagSize, int &maxprofit, bool bestset[], int numGems) {
+void sack(int i, int profit, int weight, Loot holdThis[], bool include[], int bagSize, int &maxprofit, bool bestSet[], int numGems) {
 
+	cout << " i = " <<i<< endl;
+	//if (i >= numGems)
+		//return;
 	if (weight <= bagSize && profit > maxprofit) {
 		maxprofit = profit;
-		for (int k = 0; k <= i; k++)
-			bestset[k] = include[k];
-		return;
+		bestSet[i] = include[i];
 	}
 
-	cout << maxprofit << endl;
+	//cout << maxprofit << endl;
 	if (promising(i, profit, weight, holdThis, bagSize, maxprofit, numGems)) {
-		cout << "zzz" << endl;
+		cout << "check good" << endl;
 		include[i + 1] = true;
-		sack(i + 1, profit + holdThis[i + 1].value, weight + holdThis[i + 1].weight, holdThis, include, bagSize, maxprofit, bestset, numGems);
-	}
-	else {
+		sack(i + 1, profit + holdThis[i + 1].value, weight + holdThis[i + 1].weight, holdThis, include, bagSize, maxprofit, bestSet, numGems);
+
 		include[i + 1] = false;
-		sack(i + 1, profit, weight, holdThis, include, bagSize, maxprofit, bestset, numGems);
+		sack(i + 1, profit, weight, holdThis, include, bagSize, maxprofit, bestSet, numGems);
 	}
-	cout << "maxprofit: " << maxprofit << endl;
+
 }
 
 double findRatio(int v, int w) {
@@ -76,14 +80,12 @@ double findRatio(int v, int w) {
 	return (out);
 }
 
-/*void swap(int j, int i, Loot holdThis[]) {
+void swap(int j, int i, Loot holdThis[]) {
 	Loot hold = holdThis[j];
 	holdThis[j] = holdThis[i];
 	holdThis[i] = hold;
-}*/
+}
 
-
-// An optimized version of Bubble Sort 
 void sort(Loot holdThis[], int n) {
 	int i, j;
 	bool swapped;
@@ -118,8 +120,8 @@ int main() {
 	bool bestSet[numGems];
 	bool include[numGems];
 
-
-	for (int i = 0; i <= numGems; i++) {
+	
+	for (int i = 0; i < numGems; i++) {
 		fileIn >> n;
 		fileIn >> w >> v;
 		holdThis[i].name = n;
@@ -132,31 +134,32 @@ int main() {
 
 	sort(holdThis, numGems);
 
-	/*int shit = 0;
-	for (int i = 0; i < numGems; i++)
-		shit += holdThis[i].weight;
-		cout << shit << endl;*/
-
-	sack(0, 0, 0, holdThis, include, bagSize, maxprofit, bestSet, numGems);
+	sack(-1, 0, 0, holdThis, include, bagSize, maxprofit, bestSet, numGems);
 	cout << endl;
 
 	//Format output
 	int numContents, weight, value;
 	numContents = weight = value = 0;
 
-	for (int i = 0; i <= numGems; i++)
+	for (int i = 0; i < numGems; i++)
+		if (bestSet[i] == true)
+			cout << i << " is true." << endl;
+		else
+			cout << i << " is false. " << endl;
+
+	for (int i = 0; i < numGems; i++)
 		if (bestSet[i]) {
 			numContents++;
 			weight += holdThis[i].weight;
 			value += holdThis[i].value;
 		}
 
-	cout << numContents << endl;
-	cout << weight << endl;
-	cout << value << endl;
+	//cout << numContents << endl;
+	//cout << weight << endl;
+	//cout << value << endl;
 	for (int i = 0; i <= numContents; i++)
 		if (bestSet[i])
-			holdThis[i].print();
-
+			//holdThis[i].print();
+			
 	return 0;
 }
