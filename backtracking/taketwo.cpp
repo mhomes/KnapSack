@@ -1,4 +1,3 @@
-
 /*
 * 0-1 Knapsack problem using Backtracking
 * By: Matt Homes and Allen Burris
@@ -10,21 +9,88 @@
 
 using namespace std;
 
-struct Loot {
+class loot {
+public:
 
-	string name;
-	int weight, value, pos;
+	int value, weight;
 	double ratio;
+	string name;
 
-	void print() {
-		cout << name << " " << value << " " << weight << " " /*<< ratio */ << endl;
+	loot(string n, int v, int w) {
+		name = n;
+		value = v;
+		weight = w;
+		ratio = v / w;
 	}
+
 };
 
-bool promising(int i, int profit, int weight, Loot holdThis[], int bagSize, int maxprofit, int numGems)
-{
+
+
+int maxprofit = 0;
+int numbest = 0;
+int totalWeight;
+
+int *bestSet;
+int *include;
+
+void merge(loot **a, int l, int m, int r) {
+	int i, j, k;
+	int sizeL = m - l + 1;
+	int sizeR = r - m;
+	loot ** L = new loot *[sizeL];
+	loot ** R = new loot *[sizeR];
+
+	for (i = 0; i < sizeL; i++)
+		L[i] = a[l + i];
+	for (j = 0; j < sizeR; j++)
+		R[j] = a[m + 1 + j];
+
+	i = 0;
+	j = 0;
+	k = l;
+	while (i < sizeL && j < sizeR) {
+		if (L[i]->ratio >= R[j]->ratio) {
+			a[k] = L[i];
+			i++;
+		}
+		else {
+			a[k] = R[j];
+			j++;
+		}
+		k++;
+	}
+
+	while (i < sizeL) {
+		a[k] = L[i];
+		i++;
+		k++;
+	}
+
+	while (j < sizeR) {
+		a[k] = R[j];
+		j++;
+		k++;
+	}
+}
+
+
+void mergeSort(loot **a, int l, int r) {
+	if (l < r) {
+		int m = l + (r - l) / 2;
+
+		mergeSort(a, l, m);
+		mergeSort(a, m + 1, r);
+
+		merge(a, l, m, r);
+	}
+}
+
+
+
+bool promising(int i, int bagSize, int weight, int profit, loot **Loot, int n) {
 	int totalweight, j, k;
-	float bound;
+	double bound;
 
 	if (weight >= bagSize) {
 		cout << i << " is not promising" << endl;
@@ -35,131 +101,92 @@ bool promising(int i, int profit, int weight, Loot holdThis[], int bagSize, int 
 		j = i + 1;
 		bound = profit;
 		totalweight = weight;
-		cout << j << " " << numGems << " " << (totalweight + holdThis[j].weight) << " " << bagSize << endl;
-		while (j <= numGems && (totalweight + holdThis[j].weight ) <= bagSize) {
+		while (j <= n && totalweight + Loot[j]->weight <= bagSize) {
 
-			totalweight = totalweight + holdThis[j].weight;
-			bound = bound + holdThis[j].value;
+			totalweight = totalweight + Loot[j]->weight;
+			bound = bound + Loot[j]->value;
 			j++;
-			cout << bound << endl;
 		}
 		k = j;
-		cout << " k = " << k << endl;
-		if (k <= numGems)
-			bound = bound + ((bagSize - totalweight) * (holdThis[k].ratio));
-		cout << "bound of " << i << " is " << bound << endl;
+		if (k <= n) {
+			bound = bound + ((bagSize - totalweight) * (Loot[k]->ratio));
+		}
 		return bound > maxprofit;
 	}
-
 }
 
-void sack(int i, int profit, int weight, Loot holdThis[], bool include[], int bagSize, int &maxprofit, bool bestSet[], int numGems) {
 
-	cout << " i = " <<i<< endl;
-	//if (i >= numGems)
-		//return;
+void sack(int i, int bagSize, int weight, int profit, loot ** Loot, int n) {
+
 	if (weight <= bagSize && profit > maxprofit) {
 		maxprofit = profit;
+		numbest = i;
 		bestSet[i] = include[i];
 	}
 
 	//cout << maxprofit << endl;
-	if (promising(i, profit, weight, holdThis, bagSize, maxprofit, numGems)) {
-		cout << "check good" << endl;
-		include[i + 1] = true;
-		sack(i + 1, profit + holdThis[i + 1].value, weight + holdThis[i + 1].weight, holdThis, include, bagSize, maxprofit, bestSet, numGems);
+	if (promising(i, bagSize, weight, profit, Loot, n) == true) {
+		include[i + 1] = 1;
+		sack(i + 1, bagSize, weight + Loot[i + 1]->weight, profit + Loot[i + 1]->value, Loot, n);
 
-		include[i + 1] = false;
-		sack(i + 1, profit, weight, holdThis, include, bagSize, maxprofit, bestSet, numGems);
+		include[i + 1] = 0;
+		sack(i + 1, bagSize, weight, profit, Loot, n);
 	}
 
 }
 
-double findRatio(int v, int w) {
-	double out = (1.0 * v / w);
-	return (out);
-}
-
-void swap(int j, int i, Loot holdThis[]) {
-	Loot hold = holdThis[j];
-	holdThis[j] = holdThis[i];
-	holdThis[i] = hold;
-}
-
-void sort(Loot holdThis[], int n) {
-	int i, j;
-	bool swapped;
-	for (i = 0; i < n - 1; i++) {
-		swapped = false;
-		for (j = 0; j < n - i - 1; j++){
-			if (holdThis[j].ratio < holdThis[j+1].ratio){
-				swap(holdThis[j], holdThis[j + 1]);
-				swapped = true;
-			}
-		}
-
-		if (swapped == false)
-			break;
-	}
-}
 
 int main() {
 
-	cout << " m start" << endl;
-	string n;
-	int numGems, bagSize, w, v;
-	int best = 0;
-	int maxprofit = 0;
+	int n, bagSize;
+	string file;
+
 
 	//file in
 	ifstream fileIn;
 	fileIn.open("TestFile.txt");
-	fileIn >> numGems >> bagSize;
+	fileIn >> n;
+	fileIn >> bagSize;
 
-	Loot holdThis[numGems];
-	bool bestSet[numGems];
-	bool include[numGems];
+	bestSet = new int[n];
+	include = new int[n];
 
-	
-	for (int i = 0; i < numGems; i++) {
-		fileIn >> n;
-		fileIn >> w >> v;
-		holdThis[i].name = n;
-		holdThis[i].weight = w;
-		holdThis[i].value = v;
-		holdThis[i].pos = i;
-		holdThis[i].ratio = findRatio(v, w);
+	loot ** Loot = new loot *[n + 1];
+	Loot[0] = NULL;
+
+
+	for (int x = 1; x < n + 1; x++) {
+		string n;
+		int v, w;
+		fileIn >> n >> v >> w;
+		Loot[x] = new loot(n, v, w);
 	}
 	fileIn.close();
 
-	sort(holdThis, numGems);
+	mergeSort(Loot, 1, n);
+	sack(0, bagSize, 0, 0, Loot, n);
 
-	sack(-1, 0, 0, holdThis, include, bagSize, maxprofit, bestSet, numGems);
-	cout << endl;
 
 	//Format output
-	int numContents, weight, value;
-	numContents = weight = value = 0;
-
-	for (int i = 0; i < numGems; i++)
-		if (bestSet[i] == true)
-			cout << i << " is true." << endl;
-		else
-			cout << i << " is false. " << endl;
-
-	for (int i = 0; i < numGems; i++)
-		if (bestSet[i]) {
-			numContents++;
-			weight += holdThis[i].weight;
-			value += holdThis[i].value;
+	for (int x = 1; x < n + 1; x++) {
+		if (bestSet[x] == 1) {
+			totalWeight = totalWeight + Loot[x]->weight;
 		}
+	}
 
-	//cout << numContents << endl;
-	//cout << weight << endl;
-	//cout << value << endl;
-	for (int i = 0; i <= numContents; i++)
-		if (bestSet[i])
-			//holdThis[i].print();
-			
+
+	cout << numbest << endl;
+	cout << totalWeight << endl;
+	cout << maxprofit << endl;
+	for (int x = 1; x < n + 1; x++) {
+		if (bestSet[x] == 1) {
+			cout << Loot[x]->name << " " << Loot[x]->value << " " << Loot[x]->weight << endl;
+		}
+	}
+
+
+	delete[] bestSet;
+	delete[] include;
+
 	return 0;
 }
