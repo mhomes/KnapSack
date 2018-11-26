@@ -8,177 +8,170 @@
 #include <cstring>
 
 using namespace std;
-bool pickedIt[100];
 
-struct Loot {
+class loot {
+public:
 
-	string name;
-	int weight, value, pos;
+	int value, weight;
 	double ratio;
+	string name;
 
+	loot(string n, int v, int w) {
+		name = n;
+		value = v;
+		weight = w;
+		ratio = v / w;
+	}
 	void print() {
-		cout << name <<" "<< pos <<" " << value << " " << weight << " " /*<< ratio */ << endl;
+		cout << name << " " << value << " " << weight << " " /*<< ratio */ << endl;
 	}
 };
 
-struct Node {
+int maxprofit = 0;
+int numbest = 0;
+int totalWeight;
 
-	Loot* heldItem;
-	Node* LHNode;
-	Node* RHNode;
-	Node* parent;
-	bool isRoot;
-	int bound; 
-	int curWeight;
-	int curProfit;
+int *bestSet;
+int *include;
 
-	//Node() { LHNode = RHNode = parent = NULL; isRoot = false; }
-	Node(Loot* item, Node* par) {
-		LHNode = RHNode = NULL;
-		parent = par;
-		heldItem = item;
-		isRoot = false;
-	}
+void merge(loot **a, int l, int m, int r) {
+	int i, j, k;
+	int sizeL = m - l + 1;
+	int sizeR = r - m;
+	loot ** L = new loot *[sizeL];
+	loot ** R = new loot *[sizeR];
 
-	void printNode(Node* node) {
-		cout << node->heldItem->name << endl;
-	}
+	for (i = 0; i < sizeL; i++)
+		L[i] = a[l + i];
+	for (j = 0; j < sizeR; j++)
+		R[j] = a[m + 1 + j];
 
-};
-
-void getBound(Node* v, int bagSize, Loot* holdThis[]) {
-	int totWeight = v->curWeight;
-	int count = 0;
-	for (int i = v->heldItem->pos; totWeight >= bagSize; i++) {
-		totWeight += holdThis[i + 1]->weight;
-		count++;
-		if (totWeight > bagSize) {
-			totWeight -= holdThis[i + 1]->weight;
-			break;
+	i = 0;
+	j = 0;
+	k = l;
+	while (i < sizeL && j < sizeR) {
+		if (L[i]->ratio >= R[j]->ratio) {
+			a[k] = L[i];
+			i++;
 		}
+		else {
+			a[k] = R[j];
+			j++;
+		}
+		k++;
 	}
-	v->curWeight = totWeight;
-
-	int bound = v->curProfit;
-	for (int i = v->heldItem->pos; i < count; i++) {
-		bound += holdThis[i + 1]->value;
+	while (i < sizeL) {
+		a[k] = L[i];
+		i++;
+		k++;
 	}
-	bound += (bagSize - totWeight) * (holdThis[(v->heldItem->pos + count)]->value / holdThis[(v->heldItem->pos + count)]->weight);
-	v->bound = bound;
+	while (j < sizeR) {
+		a[k] = R[j];
+		j++;
+		k++;
+	}
 }
 
-void checkNode(Node* v,int bagSize, int numGems, int best, Loot* holdThis[]) {
+void mergeSort(loot **a, int l, int r) {
+	if (l < r) {
+		int m = l + (r - l) / 2;
 
-	cout << "at node holding: " << endl;
-	if (v->isRoot == false) {
-		if (v->bound <= best)
-			return;
-		if (v->heldItem->pos == numGems)
-			return;
+		mergeSort(a, l, m);
+		mergeSort(a, m + 1, r);
+		merge(a, l, m, r);
 	}
-	if (v->curProfit > best)
-		best = v->curProfit;
-	//then check children
+}
 
-	cout << "1 " << endl;
-	//Node* left = new Node(holdThis[(v->heldItem->pos + 1)], v);
-	Node* left;
-	cout << "1.1 " << endl;
-	left->heldItem = holdThis[(v->heldItem->pos + 1)];
-	cout << "1.2 " << endl;
-	left->parent = v; 
-	cout << "1a " << endl;
+bool promising(int i, int bagSize, int weight, int profit, loot **Loot, int n) {
+	int totalweight, j, k;
+	double bound;
 
-	v->LHNode = left;
-	cout << "1b " << endl;
-	v->LHNode->curProfit = (v->curProfit + holdThis[(v->heldItem->pos + 1)]->value);
-	cout << "1c " << endl; 
-	getBound(v->LHNode, bagSize, holdThis);
-
-	cout << "2 " << endl;
-	Node* right = new Node(holdThis[(v->heldItem->pos + 1)], v);
-	v->RHNode = right;
-	v->RHNode->curProfit = v->curProfit;
-	getBound(v->RHNode, bagSize, holdThis);
-
-	cout << "3 " << endl;
-	if (v->LHNode->bound > v->RHNode->bound) {
-		checkNode(v->LHNode, bagSize, numGems, best, holdThis);
-		pickedIt[v->heldItem->pos + 1] = true;
+	if (weight >= bagSize) {
+		return false;
 	}
 	else {
-		checkNode(v->RHNode, bagSize, numGems, best, holdThis);
-		pickedIt[v->heldItem->pos + 1] = false;
+		j = i + 1;
+		bound = profit;
+		totalweight = weight;
+		while (j <= n && totalweight + Loot[j]->weight <= bagSize) {
+
+			totalweight = totalweight + Loot[j]->weight;
+			bound = bound + Loot[j]->value;
+			j++;
+		}
+		k = j;
+		if (k <= n) {
+			bound = bound + ((bagSize - totalweight) * (Loot[k]->ratio));
+		}
+		return bound > maxprofit;
+	}
+}
+
+void sack(int i, int bagSize, int weight, int profit, loot ** Loot, int n) {
+
+	if (weight <= bagSize && profit > maxprofit) {
+		maxprofit = profit;
+		numbest = i;
+		bestSet[i] = include[i];
 	}
 
+	if (promising(i, bagSize, weight, profit, Loot, n) == true) {
+		include[i + 1] = 1;
+		sack(i + 1, bagSize, weight + Loot[i + 1]->weight, profit + Loot[i + 1]->value, Loot, n);
 
-	//if ((v->curProfit + holdThis[(v->heldItem.pos + 1)]->value) > best)
-	//	checkNode(v->LHNode, best, holdThis);
-	
+		include[i + 1] = 0;
+		sack(i + 1, bagSize, weight, profit, Loot, n);
+	}
+
 }
-/*
-bool checkNode(int i, int numGems, Loot* holdThis[], int curProfit, int curCapacity, bool includedSoFar[]) {
-
-	bool notInclude[i] = checkNode(i + 1, holdThis, curProfit, curCapacity, includedSoFar);
-	if (curCapacity < holdThis[i]->weight)
-		return false;
-	else if (i >= numGems)
-		return false;
-
-	includedSoFar[i] = true;
-	return max(val(notIncluded), checkNode(i + 1, curProfit + holdThis[i]->value, curCapacity - holdThis[i]->weight, includedSoFar);
-}*/
 
 int main() {
 
-	cout << " m start" << endl;
-	string n;
-	int numGems, bagSize, w, v;
-	Node * root;
-	int best = 0;
+	int n, bagSize;
+	string file;
 
 	//file in
 	ifstream fileIn;
 	fileIn.open("TestFile.txt");
-	fileIn >> numGems >> bagSize;
+	fileIn >> n;
+	fileIn >> bagSize;
 
-	Loot* holdThis = new Loot[numGems+1];
+	bestSet = new int[n];
+	include = new int[n];
 
-	for (int i = 1; i <= numGems; i++) {
-		fileIn >> n;
-		fileIn >> w >> v;
-		holdThis[i].name = n;
-		holdThis[i].weight = w;
-		holdThis[i].value = v;
-		holdThis[i].pos = i;
+	loot ** Loot = new loot *[n + 1];
+	Loot[0] = NULL;
+
+	for (int x = 1; x < n + 1; x++) {
+		string n;
+		int v, w;
+		fileIn >> n >> v >> w;
+		Loot[x] = new loot(n, v, w);
 	}
 	fileIn.close();
 
-	root->curWeight = 0;
-	root->curProfit = 0;
-	root->isRoot = true;
-	cout << "start" << endl;
-	checkNode(root, bagSize, numGems, best, &holdThis);
-	cout << "stop" << endl;
+	mergeSort(Loot, 1, n);
+	sack(0, bagSize, 0, 0, Loot, n);
+
 
 	//Format output
-	int numContents, weight, value;
-	numContents = weight = value = 0;
-
-	for (int i = 1; i <= numGems; i++)
-		if (pickedIt[i]) {
-			numContents++;
-			weight += holdThis[i].weight;
-			value += holdThis[i].value;
+	for (int i = 1; i < n + 1; i++) {
+		if (bestSet[i] == 1) {
+			totalWeight = totalWeight + Loot[i]->weight;
 		}
+	}
 
-	cout << numContents << endl;
-	cout << weight << endl;
-	cout << value << endl;
-	for (int i = 0; i < numContents; i++)
-		if (pickedIt[i])
-			holdThis[i].print();
+	cout << numbest << endl;
+	cout << totalWeight << endl;
+	cout << maxprofit << endl;
+	for (int i = 1; i < n + 1; i++) {
+		if (bestSet[i] == 1) {
+			Loot[i]->print();
+		}
+	}
 
+	delete[] bestSet;
+	delete[] include;
 
 	return 0;
 }

@@ -22,10 +22,10 @@ public:
 		weight = w;
 		ratio = v / w;
 	}
-
+	void print() {
+		cout << name << " " << value << " " << weight << " " /*<< ratio */ << endl;
+	}
 };
-
-
 
 int maxprofit = 0;
 int numbest = 0;
@@ -60,13 +60,11 @@ void merge(loot **a, int l, int m, int r) {
 		}
 		k++;
 	}
-
 	while (i < sizeL) {
 		a[k] = L[i];
 		i++;
 		k++;
 	}
-
 	while (j < sizeR) {
 		a[k] = R[j];
 		j++;
@@ -74,30 +72,24 @@ void merge(loot **a, int l, int m, int r) {
 	}
 }
 
-
 void mergeSort(loot **a, int l, int r) {
 	if (l < r) {
 		int m = l + (r - l) / 2;
 
 		mergeSort(a, l, m);
 		mergeSort(a, m + 1, r);
-
 		merge(a, l, m, r);
 	}
 }
-
-
 
 bool promising(int i, int bagSize, int weight, int profit, loot **Loot, int n) {
 	int totalweight, j, k;
 	double bound;
 
 	if (weight >= bagSize) {
-		cout << i << " is not promising" << endl;
 		return false;
 	}
 	else {
-		cout << "promise check" << endl;
 		j = i + 1;
 		bound = profit;
 		totalweight = weight;
@@ -115,7 +107,6 @@ bool promising(int i, int bagSize, int weight, int profit, loot **Loot, int n) {
 	}
 }
 
-
 void sack(int i, int bagSize, int weight, int profit, loot ** Loot, int n) {
 
 	if (weight <= bagSize && profit > maxprofit) {
@@ -124,7 +115,6 @@ void sack(int i, int bagSize, int weight, int profit, loot ** Loot, int n) {
 		bestSet[i] = include[i];
 	}
 
-	//cout << maxprofit << endl;
 	if (promising(i, bagSize, weight, profit, Loot, n) == true) {
 		include[i + 1] = 1;
 		sack(i + 1, bagSize, weight + Loot[i + 1]->weight, profit + Loot[i + 1]->value, Loot, n);
@@ -135,12 +125,10 @@ void sack(int i, int bagSize, int weight, int profit, loot ** Loot, int n) {
 
 }
 
-
 int main() {
 
 	int n, bagSize;
 	string file;
-
 
 	//file in
 	ifstream fileIn;
@@ -153,7 +141,6 @@ int main() {
 
 	loot ** Loot = new loot *[n + 1];
 	Loot[0] = NULL;
-
 
 	for (int x = 1; x < n + 1; x++) {
 		string n;
@@ -168,22 +155,20 @@ int main() {
 
 
 	//Format output
-	for (int x = 1; x < n + 1; x++) {
-		if (bestSet[x] == 1) {
-			totalWeight = totalWeight + Loot[x]->weight;
+	for (int i = 1; i < n + 1; i++) {
+		if (bestSet[i] == 1) {
+			totalWeight = totalWeight + Loot[i]->weight;
 		}
 	}
-
 
 	cout << numbest << endl;
 	cout << totalWeight << endl;
 	cout << maxprofit << endl;
-	for (int x = 1; x < n + 1; x++) {
-		if (bestSet[x] == 1) {
-			cout << Loot[x]->name << " " << Loot[x]->value << " " << Loot[x]->weight << endl;
+	for (int i = 1; i < n + 1; i++) {
+		if (bestSet[i] == 1) {
+			Loot[i]->print();
 		}
 	}
-
 
 	delete[] bestSet;
 	delete[] include;
