@@ -27,27 +27,22 @@ bool promising(int i, int profit, int weight, Loot holdThis[], int bagSize, int 
 	float bound;
 
 	if (weight >= bagSize) {
-		cout << i << " is not promising" << endl;
 		return false;
 	}
 	else {
-		cout << "promise check" << endl;
 		j = i + 1;
 		bound = profit;
 		totalweight = weight;
-		cout << j << " " << numGems << " " << (totalweight + holdThis[j].weight) << " " << bagSize << endl;
 		while (j <= numGems && (totalweight + holdThis[j].weight ) <= bagSize) {
 
 			totalweight = totalweight + holdThis[j].weight;
 			bound = bound + holdThis[j].value;
 			j++;
-			cout << bound << endl;
 		}
 		k = j;
-		cout << " k = " << k << endl;
+
 		if (k <= numGems)
 			bound = bound + ((bagSize - totalweight) * (holdThis[k].ratio));
-		cout << "bound of " << i << " is " << bound << endl;
 		return bound > maxprofit;
 	}
 
@@ -55,17 +50,14 @@ bool promising(int i, int profit, int weight, Loot holdThis[], int bagSize, int 
 
 void sack(int i, int profit, int weight, Loot holdThis[], bool include[], int bagSize, int &maxprofit, bool bestSet[], int numGems) {
 
-	cout << " i = " <<i<< endl;
-	//if (i >= numGems)
-		//return;
+	if (i >= numGems)
+		return;
 	if (weight <= bagSize && profit > maxprofit) {
 		maxprofit = profit;
 		bestSet[i] = include[i];
 	}
 
-	//cout << maxprofit << endl;
 	if (promising(i, profit, weight, holdThis, bagSize, maxprofit, numGems)) {
-		cout << "check good" << endl;
 		include[i + 1] = true;
 		sack(i + 1, profit + holdThis[i + 1].value, weight + holdThis[i + 1].weight, holdThis, include, bagSize, maxprofit, bestSet, numGems);
 
@@ -105,7 +97,6 @@ void sort(Loot holdThis[], int n) {
 
 int main() {
 
-	cout << " m start" << endl;
 	string n;
 	int numGems, bagSize, w, v;
 	int best = 0;
@@ -142,24 +133,18 @@ int main() {
 	numContents = weight = value = 0;
 
 	for (int i = 0; i < numGems; i++)
-		if (bestSet[i] == true)
-			cout << i << " is true." << endl;
-		else
-			cout << i << " is false. " << endl;
-
-	for (int i = 0; i < numGems; i++)
 		if (bestSet[i]) {
 			numContents++;
 			weight += holdThis[i].weight;
 			value += holdThis[i].value;
 		}
 
-	//cout << numContents << endl;
-	//cout << weight << endl;
-	//cout << value << endl;
-	for (int i = 0; i <= numContents; i++)
-		if (bestSet[i])
-			//holdThis[i].print();
+	cout << numContents << endl;
+	cout << weight << endl;
+    cout << value << endl;
+	for (int i = 0; i < numContents; i++)
+		if (bestSet[i] ==   true )
+			holdThis[i].print();
 			
 	return 0;
 }
