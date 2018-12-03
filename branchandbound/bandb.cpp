@@ -26,7 +26,8 @@ struct node {
 	int profit;
 	int weight;
 	int bound;
-	int yes[0] = NULL;
+	int included;
+	int yes[];
 };
 
 void merge(loot **a, int l, int m, int r) {
@@ -125,7 +126,7 @@ node knapsack(int itemNumber, int gemValue[], int gemWeight[], int maxWeight) {
 
 	//v.bound = bound(v, itemNumber, maxWeight, pV, wV);
 	Q.push(v);
-
+	int i = 0;
 	while (!Q.empty()){
 		v = Q.front();
 		Q.pop();
@@ -144,8 +145,10 @@ node knapsack(int itemNumber, int gemValue[], int gemWeight[], int maxWeight) {
 
 		if (gem.weight <= maxWeight && gem.profit > maxProfit){
 			maxProfit = gem.profit;
+			gem.yes[i] = gem.level;
+			i++;
+			gem.included = i;
 		}
-
 		if (gem.bound > maxProfit){
 			Q.push(gem);
 		}
@@ -201,14 +204,22 @@ int main() {
 	mergeSort(Loot, 1, n);
 
 	node end = knapsack(itemNumber, gemValue, gemWeight, maxWeight);
-	
-	
-	//cout << end.included << endl;
-	cout << end.weight << endl;
-	cout << end.profit << endl;
-	for (int i = 1; i < n + 1; i++) {
-		//if (bestSet[i] == 1) {
-			//Loot[i]->print();
+
+	cout << endl;
+
+	int totalweight = 0;
+	int totalprofit = 0;
+
+	for (int i = 1; i < end.included; i++) {
+		totalweight += Loot[end.yes[i]]->weight;
+		totalprofit += Loot[end.yes[i]]->value;
+	}
+
+	cout << end.included -1 << endl;
+	cout << totalweight << endl;
+	cout << totalprofit << endl;
+	for (int i = 1; i < end.included; i++) {
+		Loot[end.yes[i]]->print();
 	}
 
 	return 0;
