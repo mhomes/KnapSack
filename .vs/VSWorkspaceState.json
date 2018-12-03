@@ -2,9 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\backtracking",
-    "\\Dynamic Programming",
-    "\\GreedyKnapSack",
-    "\\GreedyKnapSack\\GreedyKnapSack"
+    "\\branchandbound"
   ],
   "SelectedNode": "\\backtracking\\backtracking.cpp",
   "PreviewInSolutionExplorer": false
